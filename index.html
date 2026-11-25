@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Атлас</title>
+<style>
+html,body{margin:0;height:100%;background:#07080f;color:#eadfcb;font:16px/1.45 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
+#gate{position:fixed;inset:0;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 20%,#232041 0,#0b0c18 55%,#07080f 100%)}
+#gate .card{width:min(380px,100%);padding:28px 26px 24px;border:1px solid rgba(224,188,112,.5);border-radius:16px;background:rgba(13,14,30,.82);box-shadow:0 18px 50px rgba(0,0,0,.6);text-align:center}
+#gate h1{margin:0 0 6px;font:600 26px/1.2 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;letter-spacing:.06em;color:#f4e7c6}
+#gate p{margin:0 0 18px;color:#b7b4cf;font-size:14px}
+#gate input{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:10px;border:1px solid #4a4670;background:#0b0c18;color:#f4e7c6;font-size:17px;text-align:center;outline:none}
+#gate input:focus{border-color:#dfbd73}
+#gate button{margin-top:12px;width:100%;padding:12px;border-radius:10px;border:1px solid #dfbd73;background:#dfbd73;color:#1d1608;font-size:16px;font-weight:600;cursor:pointer}
+#gate-msg{min-height:22px;margin-top:14px;font-size:14px;color:#b7b4cf}#gate-msg.bad{color:#ff9d8a}
+</style>
+</head>
+<body>
+<div id="gate"><div class="card"><h1>Атлас</h1><p>Введите пароль, который прислал мастер.</p>
+<form id="gate-form" hidden><input id="gate-pass" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Пароль"><button type="submit">Открыть</button></form>
+<div id="gate-msg" role="status"></div></div></div>
+<script>window.__SITE__ = {"salt":"YpoxXGxCgsUqbJfrWnpPcg==","iter":310000,"manifest":"a33001200dda3aab02e3d5a0.bin"};</script>
+<script>(()=>{var w=globalThis.crypto.subtle,I=new TextEncoder;async function A(e,t,a){let i=await w.importKey("raw",I.encode(e.normalize("NFC")),"PBKDF2",!1,["deriveBits"]),f=await w.deriveBits({name:"PBKDF2",hash:"SHA-256",salt:t,iterations:a},i,256);return h(new Uint8Array(f))}async function h(e){return{key:await w.importKey("raw",e,"AES-GCM",!1,["encrypt","decrypt"]),raw:e,mac:await w.importKey("raw",e,{name:"HMAC",hash:"SHA-256"},!1,["sign"])}}async function s(e,t){let a=t instanceof Uint8Array?t:new Uint8Array(t);return new Uint8Array(await w.decrypt({name:"AES-GCM",iv:a.subarray(0,12)},e.key,a.subarray(12)))}function S(e){let t=/^#p=([^&]*)(?:&(.*))?$/.exec(e||"");if(!t)return{pass:null,rest:e||""};let a=t[1];try{a=decodeURIComponent(a)}catch{}return{pass:a,rest:t[2]?"#"+t[2]:""}}var g=window.__SITE__,U="atlas-players-key-v1",C="data/atlas.json",r=e=>document.getElementById(e),x=window.fetch.bind(window),v={to:e=>btoa(String.fromCharCode(...e)),from:e=>Uint8Array.from(atob(e),t=>t.charCodeAt(0))},y=(e,t=!1)=>{r("gate-msg").textContent=e,r("gate-msg").className=t?"bad":""},l=async e=>{let t=await x(new URL(e,document.baseURI));if(!t.ok)throw new Error("файл не найден");return new Uint8Array(await t.arrayBuffer())};async function K(e){return JSON.parse(new TextDecoder().decode(await s(e,await l(g.manifest))))}async function D(e,t){r("gate-form").hidden=!0,y("Открываю атлас…");let a=document.createElement("style");a.textContent=new TextDecoder().decode(await s(e,await l(t.css))),document.head.appendChild(a),y("Открываю атлас: картинки…");let i=await s(e,await l(t.pics)),f=new DataView(i.buffer,i.byteOffset,4).getUint32(0,!0),L=JSON.parse(new TextDecoder().decode(i.subarray(4,4+f))),p=new TextDecoder().decode(await s(e,await l(t.files[C].f)));for(let[n,[o,c,d]]of Object.entries(L)){let u=URL.createObjectURL(new Blob([i.subarray(4+f+o,4+f+o+c)],{type:d}));p=p.split(JSON.stringify(n)).join(JSON.stringify(u))}let m=new URL(".",document.baseURI);window.fetch=async(n,o)=>{try{let c=new URL(typeof n=="string"?n:n.url,document.baseURI);if(c.origin===m.origin&&c.pathname.startsWith(m.pathname)){let d=t.files[decodeURIComponent(c.pathname.slice(m.pathname.length))];if(d){let u=d===t.files[C]?new TextEncoder().encode(p):await s(e,await l(d.f));return new Response(u,{status:200,headers:{"Content-Type":d.t,"Content-Length":String(u.byteLength)}})}}}catch{return new Response(null,{status:404})}return x(n,o)},y("Открываю атлас: долина…");let T=await s(e,await l(t.app));(!location.hash||location.hash==="#")&&history.replaceState(null,"","#/world"),r("gate").remove();for(let n of['<canvas id="scene"></canvas>','<div id="labels"></div>','<div id="ui"></div>','<div id="boot">Атлас загружается…</div>'])document.body.insertAdjacentHTML("beforeend",n);import(URL.createObjectURL(new Blob([T],{type:"text/javascript"}))).catch(n=>{let o=r("boot");o&&(o.textContent="Атлас не запустился: "+(n&&n.message||n)),console.error(n)})}async function R(e,t){let a=await K(e);if(t)try{localStorage.setItem(U,v.to(e.raw))}catch{}await D(e,a)}async function E(e){y("Проверяю пароль…");try{await R(await A(e.trim(),v.from(g.salt),g.iter),!0)}catch(t){r("gate-form").hidden=!1,y(t.message==="файл не найден"?"Атлас сейчас недоступен. Попробуйте позже.":"Пароль не подошёл. Проверьте раскладку и попробуйте ещё раз.",!0),r("gate-pass").select()}}r("gate-form").addEventListener("submit",e=>{e.preventDefault();let t=r("gate-pass").value;t.trim()&&E(t)});var b=S(location.hash);if(b.pass!==null)history.replaceState(null,"",location.pathname+location.search+b.rest),E(b.pass);else{let e=null;try{e=localStorage.getItem(U)}catch{}e?h(v.from(e)).then(t=>R(t,!1)).catch(()=>{try{localStorage.removeItem(U)}catch{}r("gate-form").hidden=!1,y("Введите пароль ещё раз.")}):(r("gate-form").hidden=!1,r("gate-pass").focus())}})();
+</script>
+</body>
+</html>
